@@ -7,34 +7,67 @@ import shutil
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
-from backend.src.utils.logger import Logger
-from src.config.config import Config
+from src.utils.logger import Logger
 
 logger = Logger(__name__)
 
 def init_project():
-    """初始化项目目录和配置"""
+    """初始化项目目录结构"""
     try:
         # 创建必要的目录
-        data_dir = project_root / 'data'
-        logs_dir = project_root / 'logs'
-        config_dir = project_root / 'src' / 'config'
+        directories = [
+            'data',
+            'logs',
+            'outputs/models',
+            'outputs/logs',
+            'src/api',
+            'src/config',
+            'src/data/collectors',
+            'src/ml/features',
+            'src/ml/models',
+            'src/ml/training',
+            'src/ml/utils',
+            'src/models',
+            'src/utils',
+            'tests'
+        ]
         
-        data_dir.mkdir(exist_ok=True)
-        logs_dir.mkdir(exist_ok=True)
+        for dir_path in directories:
+            full_path = project_root / dir_path
+            full_path.mkdir(parents=True, exist_ok=True)
+            logger.info(f"创建目录: {full_path}")
         
         # 复制配置文件模板（如果不存在）
-        config_example = config_dir / 'config.example.yaml'
-        config_file = config_dir / 'config.yaml'
+        config_example = project_root / 'src' / 'config' / 'config.example.yaml'
+        config_file = project_root / 'src' / 'config' / 'config.yaml'
         
         if not config_file.exists() and config_example.exists():
             shutil.copy(config_example, config_file)
-            logger.info(f"已创建配置文件: {config_file}")
+            logger.info(f"创建配置文件: {config_file}")
+        
+        # 创建必要的空文件
+        files = [
+            'src/api/__init__.py',
+            'src/config/__init__.py',
+            'src/data/__init__.py',
+            'src/data/collectors/__init__.py',
+            'src/ml/__init__.py',
+            'src/ml/features/__init__.py',
+            'src/ml/models/__init__.py',
+            'src/ml/training/__init__.py',
+            'src/ml/utils/__init__.py',
+            'src/models/__init__.py',
+            'src/utils/__init__.py',
+            'tests/__init__.py'
+        ]
+        
+        for file_path in files:
+            full_path = project_root / file_path
+            if not full_path.exists():
+                full_path.touch()
+                logger.info(f"创建文件: {full_path}")
         
         logger.info("项目初始化完成")
-        logger.info(f"数据目录: {data_dir}")
-        logger.info(f"日志目目录: {logs_dir}")
-        logger.info(f"配置文件: {config_file}")
         
     except Exception as e:
         logger.error(f"项目初始化失败: {e}")
