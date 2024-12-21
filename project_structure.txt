@@ -1,0 +1,32 @@
+quantitative_trading/
+├── backend/
+│   ├── venv/
+│   ├── src/
+│   │   ├── data/
+│   │   │   ├── collectors/
+│   │   │   ├── processors/
+│   │   │   └── storage/
+│   │   ├── models/
+│   │   │   ├── indicators/
+│   │   │   ├── strategies/
+│   │   │   └── optimization/
+│   │   ├── backtesting/
+│   │   ├── trading/
+│   │   └── api/
+│   ├── scripts/
+│   ├── tests/
+│   ├── config/
+│   ├── requirements.txt
+│   └── README.md
+├── frontend/
+│   ├── node_modules/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── utils/
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── README.md
+└── README.md 

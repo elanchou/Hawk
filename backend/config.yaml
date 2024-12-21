@@ -1,0 +1,21 @@
+api:
+  binance:
+    api_key: ''
+    api_secret: ''
+    testnet: true
+database:
+  echo: false
+  url: sqlite:///trading.db
+logging:
+  file: trading.log
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  level: INFO
+trading:
+  intervals:
+  - 1m
+  - 5m
+  - 15m
+  max_positions: 3
+  risk_per_trade: 0.02
+  symbols:
+  - BTCUSDT

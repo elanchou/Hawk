@@ -1,0 +1,28 @@
+api:
+  binance:
+    api_key: "your_api_key_here"
+    api_secret: "your_api_secret_here"
+    testnet: true
+    symbols: ["BTCUSDT"]
+    intervals: ["1m", "5m", "15m"]
+
+database:
+  url: "sqlite:///data/trading.db"
+  echo: false
+
+trading:
+  risk_per_trade: 0.02
+  max_positions: 3
+  initial_capital: 100000
+  stop_loss: 0.02
+  take_profit: 0.04
+
+data:
+  history_days: 30
+  cache_enabled: true
+  cache_expire: 3600
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/trading.log" 
