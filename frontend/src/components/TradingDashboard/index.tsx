@@ -1,108 +1,118 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Statistic } from 'antd';
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
-import styled from '@emotion/styled';
-import { TradeList, Trade } from './TradeList';
-import { EquityChart, EquityData } from './EquityChart';
-import { PositionList, Position } from './PositionList';
-import { fetchTrades, fetchPositions, fetchEquityCurve } from '../../services/api';
+import { Row, Col, Card, Space } from 'antd';
+import { ExchangeSelector } from '../ExchangeSelector';
+import { MarketChart } from './MarketChart';
+import { TradeControl } from './TradeControl';
+import { HFTControl } from '../HFTControl';
+import { OrderBook } from './OrderBook';
+import { TradeList } from './TradeList';
+import { PositionList } from './PositionList';
+import { EquityChart } from './EquityChart';
+import { tradingService } from '../../services/tradingService';
+import { SymbolSelector } from './SymbolSelector';
+import { IntervalSelector } from './IntervalSelector';
 
-const DashboardContainer = styled.div`
-  .ant-card {
-    height: 100%;
-  }
-`;
+export const TradingDashboard: React.FC = () => {
+  const [exchange, setExchange] = useState('okx');
+  const [symbol, setSymbol] = useState('BTC-USDT');
+  const [interval, setInterval] = useState('1m');
+  const [data, setData] = useState({
+    trades: [],
+    positions: [],
+    equity: [],
+    marketData: [],
+    orderBook: { bids: [], asks: [] }
+  });
 
-const TradingDashboard: React.FC = () => {
-  const [trades, setTrades] = useState<Trade[]>([]);
-  const [positions, setPositions] = useState<Position[]>([]);
-  const [equityCurve, setEquityCurve] = useState<EquityData[]>([]);
-  const [dailyPnl, setDailyPnl] = useState<number>(0);
+  const loadData = async () => {
+    try {
+      const [
+        trades,
+        positions,
+        equity,
+        marketData,
+        orderBook
+      ] = await Promise.all([
+        tradingService.getTrades(exchange),
+        tradingService.getPositions(exchange),
+        tradingService.getEquityCurve(exchange),
+        tradingService.getMarketData(exchange, symbol, interval),
+        tradingService.getOrderBook(exchange, symbol)
+      ]);
+
+      setData({
+        trades,
+        positions,
+        equity,
+        marketData,
+        orderBook
+      });
+    } catch (error) {
+      console.error('Failed to load data:', error);
+    }
+  };
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [tradesData, positionsData, equityData] = await Promise.all([
-          fetchTrades(),
-          fetchPositions(),
-          fetchEquityCurve(),
-        ]);
-        setTrades(tradesData);
-        setPositions(positionsData);
-        setEquityCurve(equityData);
-
-        // 计算今日盈亏
-        if (equityData.length >= 2) {
-          const todayStart = equityData[equityData.length - 2].equity;
-          const current = equityData[equityData.length - 1].equity;
-          setDailyPnl(current - todayStart);
-        }
-      } catch (error) {
-        console.error('Failed to load data:', error);
-      }
-    };
-
     loadData();
-    const interval = setInterval(loadData, 5000);
+    const interval = setInterval(loadData, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [exchange, symbol, interval]);
 
   return (
-    <DashboardContainer>
+    <div className="trading-dashboard">
       <Row gutter={[16, 16]}>
-        <Col span={8}>
-          <Card>
-            <Statistic
-              title="账户总值"
-              value={equityCurve[equityCurve.length - 1]?.equity || 0}
-              precision={2}
-              prefix="$"
-            />
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card>
-            <Statistic
-              title="今日盈亏"
-              value={dailyPnl}
-              precision={2}
-              prefix="$"
-              valueStyle={{ color: dailyPnl >= 0 ? '#3f8600' : '#cf1322' }}
-            />
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card>
-            <Statistic
-              title="持仓数量"
-              value={positions.length}
-            />
-          </Card>
-        </Col>
-      </Row>
-
-      <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
         <Col span={24}>
-          <Card title="权益曲线">
-            <EquityChart data={equityCurve} />
+          <Card>
+            <Space>
+              <ExchangeSelector value={exchange} onChange={setExchange} />
+              <SymbolSelector value={symbol} onChange={setSymbol} exchange={exchange} />
+              <IntervalSelector value={interval} onChange={setInterval} />
+            </Space>
           </Card>
         </Col>
-      </Row>
 
-      <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+        <Col span={16}>
+          <MarketChart 
+            marketData={data.marketData}
+            orderBook={data.orderBook}
+          />
+        </Col>
+
+        <Col span={8}>
+          <OrderBook data={data.orderBook} />
+        </Col>
+
         <Col span={12}>
-          <Card title="当前持仓">
-            <PositionList positions={positions} />
+          <TradeControl 
+            symbol={symbol}
+            exchange={exchange}
+            onTrade={loadData}
+          />
+        </Col>
+
+        <Col span={12}>
+          <HFTControl 
+            symbol={symbol}
+            exchange={exchange}
+          />
+        </Col>
+
+        <Col span={24}>
+          <EquityChart data={data.equity} />
+        </Col>
+
+        <Col span={12}>
+          <Card title="持仓">
+            <PositionList positions={data.positions} />
           </Card>
         </Col>
+
         <Col span={12}>
-          <Card title="最近交易">
-            <TradeList trades={trades} />
+          <Card title="交易记录">
+            <TradeList trades={data.trades} />
           </Card>
         </Col>
       </Row>
-    </DashboardContainer>
+    </div>
   );
-};
-
-export default TradingDashboard; 
+}; 

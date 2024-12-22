@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "quant-trading-backend"
+name = "hawk-trading"
 version = "0.1.0"
-description = "Quantitative Trading System Backend"
+description = "Hawk Quantitative Trading System"
 authors = ["Your Name <your.email@example.com>"]
 packages = [
     { include = "src" }
@@ -27,6 +27,7 @@ ta = "^0.11.0"
 transformers = "^4.47.1"
 pytorch-lightning = "^2.5.0.post0"
 tensorboardx = "^2.6.2.2"
+okx = "^2.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

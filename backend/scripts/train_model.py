@@ -58,7 +58,7 @@ def train_model(**kwargs):
         train_loader, val_loader, test_loader = data_loader.load_data(
             symbol=kwargs['symbol'],
             interval=kwargs['interval'],
-            start_time=datetime(2023, 1, 1),
+            start_time=datetime(2024, 12, 20),
             end_time=datetime.now(),
             feature_generator=feature_generator
         )

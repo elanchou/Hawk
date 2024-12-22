@@ -122,7 +122,7 @@ class MarketDataService:
         batch_count = math.ceil(total_days / self.batch_days)
         
         logger.info(f"开始同步数据范围: {start_time} 到 {end_time}")
-        logger.info(f"总天数: {total_days}天, 分{batch_count}批同步")
+        logger.info(f"���天数: {total_days}天, 分{batch_count}批同步")
         
         current_start = start_time
         for batch in range(batch_count):
@@ -242,23 +242,36 @@ class MarketDataService:
         """获取市场数据"""
         session = self.db.get_session()
         try:
-            query = select(MarketData).where(
-                and_(
-                    MarketData.symbol == symbol,
-                    MarketData.interval == interval,
-                    MarketData.timestamp >= start_time,
-                    MarketData.timestamp <= (end_time or datetime.utcnow())
-                )
-            ).order_by(MarketData.timestamp)
+            # 修改查询，明确指定列名
+            query = f"""
+                SELECT 
+                    timestamp,
+                    open,
+                    high,
+                    low,
+                    close,
+                    volume,
+                    quote_volume as quote_volume,
+                    trades_count,
+                    taker_buy_volume,
+                    taker_buy_quote_volume
+                FROM market_data 
+                WHERE symbol = '{symbol}' 
+                AND interval = '{interval}'
+                AND timestamp BETWEEN '{start_time}' AND '{end_time or datetime.utcnow()}'
+                ORDER BY timestamp ASC
+            """
             
-            result = session.execute(query)
-            records = result.fetchall()
+            df = pd.read_sql(query, session.bind)
             
-            if not records:
+            if df.empty:
+                logger.warning(f"未找到市场数据: {symbol} {interval}")
                 return pd.DataFrame()
             
-            df = pd.DataFrame([r._asdict() for r in records])
-            df.set_index('timestamp', inplace=True)
+            # 确保时间戳列存在并设为索引
+            if 'timestamp' in df.columns:
+                df.set_index('timestamp', inplace=True)
+            
             return df
             
         finally:
@@ -301,7 +314,7 @@ class MarketDataService:
             existing.status = status
             existing.error_message = error_message
         else:
-            # 创建新记录
+            # 创建��记录
             new_status = DataSyncStatus(
                 symbol=symbol,
                 interval=interval,

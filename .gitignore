@@ -67,3 +67,6 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+backend/data/
+backend/output/
+backend/result/

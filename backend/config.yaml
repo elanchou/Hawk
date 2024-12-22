@@ -19,3 +19,30 @@ trading:
   risk_per_trade: 0.02
   symbols:
   - BTCUSDT
+
+# 数据相关配置
+data:
+  raw_path: "data/raw"
+  processed_path: "data/processed"
+  test_data: "data/processed/test_data.csv"
+
+# 模型相关配置
+model:
+  save_path: "models"
+  features:
+    - "open"
+    - "high"
+    - "low"
+    - "close"
+    - "volume"
+
+# 训练相关配置
+training:
+  batch_size: 64
+  epochs: 10
+  learning_rate: 0.001
+  validation_split: 0.2
+
+# 回测相关配置
+backtest:
+  results_path: "results/backtest"
