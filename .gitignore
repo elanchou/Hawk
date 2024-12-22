@@ -70,3 +70,6 @@ MANIFEST
 backend/data/
 backend/output/
 backend/result/
+
+# MacOS
+.DS_Store

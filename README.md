@@ -1,6 +1,6 @@
 # Hawk Trading System
 
-Hawk Trading is a high-frequency cryptocurrency trading system designed to support the OKX exchange.
+Hawk Trading is a high-frequency cryptocurrency trading system.
 
 ## Features
 
@@ -10,18 +10,6 @@ Hawk Trading is a high-frequency cryptocurrency trading system designed to suppo
 - Trading history and position management
 - Performance analytics
 - Backtesting capabilities
-
-## Directory Structure
-backend/
-├── scripts/ # Directory for scripts
-│ ├── train_and_backtest.py # Script for training and backtesting
-├── src/ # Source code directory
-│ ├── api/ # API related code
-│ ├── config/ # Configuration files
-│ ├── models/ # Data models
-│ ├── services/ # Service layer
-│ ├── utils/ # Utility classes
-└── requirements.txt # Dependency file
 
 ## Installation
 
