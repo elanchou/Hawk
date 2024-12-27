@@ -11,17 +11,35 @@ import { EquityChart } from './EquityChart';
 import { tradingService } from '../../services/tradingService';
 import { SymbolSelector } from './SymbolSelector';
 import { IntervalSelector } from './IntervalSelector';
+import type { Trade, Position, EquityData, OrderBook as OrderBookType } from '../../types';
+
+interface MarketData {
+  timestamp: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+interface DashboardData {
+  trades: Trade[];
+  positions: Position[];
+  equity: EquityData[];
+  marketData: MarketData[];
+  orderBook: OrderBookType;
+}
 
 export const TradingDashboard: React.FC = () => {
   const [exchange, setExchange] = useState('okx');
   const [symbol, setSymbol] = useState('BTC-USDT');
   const [interval, setInterval] = useState('1m');
-  const [data, setData] = useState({
+  const [data, setData] = useState<DashboardData>({
     trades: [],
     positions: [],
     equity: [],
     marketData: [],
-    orderBook: { bids: [], asks: [] }
+    orderBook: { bids: [], asks: [], timestamp: '' }
   });
 
   const loadData = async () => {
@@ -33,10 +51,10 @@ export const TradingDashboard: React.FC = () => {
         marketData,
         orderBook
       ] = await Promise.all([
-        tradingService.getTrades(exchange),
-        tradingService.getPositions(exchange),
-        tradingService.getEquityCurve(exchange),
-        tradingService.getMarketData(exchange, symbol, interval),
+        tradingService.getTrades(),
+        tradingService.getPositions(),
+        tradingService.getEquityCurve(),
+        tradingService.getMarketData(symbol, interval),
         tradingService.getOrderBook(exchange, symbol)
       ]);
 
@@ -54,8 +72,10 @@ export const TradingDashboard: React.FC = () => {
 
   useEffect(() => {
     loadData();
-    const interval = setInterval(loadData, 1000);
-    return () => clearInterval(interval);
+    const intervalId = window.setInterval(() => {
+      loadData();
+    }, 1000);
+    return () => clearInterval(intervalId);
   }, [exchange, symbol, interval]);
 
   return (
@@ -73,8 +93,8 @@ export const TradingDashboard: React.FC = () => {
 
         <Col span={16}>
           <MarketChart 
-            marketData={data.marketData}
-            orderBook={data.orderBook}
+            data={data.marketData}
+            indicators={[]}
           />
         </Col>
 

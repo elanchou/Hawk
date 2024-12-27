@@ -49,6 +49,7 @@ venv/
 *.sublime-workspace
 
 # Distribution / packaging
+poetry.lock
 .Python
 build/
 develop-eggs/
@@ -69,7 +70,7 @@ share/python-wheels/
 MANIFEST
 backend/data/
 backend/output/
-backend/result/
+backend/results/
 
 # MacOS
 .DS_Store

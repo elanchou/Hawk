@@ -1,6 +1,6 @@
 import axios from 'axios';
 import type { Trade } from '../components/TradingDashboard/TradeList';
-import type { Position } from '../components/TradingDashboard/PositionList';
+import type { Position } from '../types';
 import type { EquityData } from '../components/TradingDashboard/EquityChart';
 
 const api = axios.create({

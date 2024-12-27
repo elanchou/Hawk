@@ -21,6 +21,12 @@ export interface EquityData {
     positions_value: number;
 }
 
+export interface OrderBook {
+    bids: Array<[number, number]>;
+    asks: Array<[number, number]>;
+    timestamp: string;
+}
+
 export interface MarketData {
     timestamp: string;
     open: number;
@@ -28,22 +34,6 @@ export interface MarketData {
     low: number;
     close: number;
     volume: number;
-}
-
-export interface TechnicalIndicator {
-    timestamp: string;
-    ma_20: number;
-    ma_50: number;
-    rsi_14: number;
-    macd: number;
-    macd_signal: number;
-    macd_hist: number;
-}
-
-export interface OrderBook {
-    bids: Array<[number, number]>;
-    asks: Array<[number, number]>;
-    timestamp: string;
 }
 
 export interface HFTStatus {

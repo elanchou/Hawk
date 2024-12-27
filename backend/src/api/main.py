@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Optional
 import jwt
 from datetime import datetime, timedelta
-from src.models.database import DatabaseManager, Trade, Position
+from ..models.database import DatabaseManager, Trade, Position
 from ..utils.logger import Logger
 from ..config.config import Config
 

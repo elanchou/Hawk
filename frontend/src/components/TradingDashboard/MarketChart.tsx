@@ -15,12 +15,21 @@ const ChartContainer = styled.div`
     height: 500px;
 `;
 
+interface MarketData {
+    timestamp: string;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+    volume: number;
+}
+
 interface MarketChartProps {
-    marketData: any[];
+    data: MarketData[];
     indicators: any[];
 }
 
-export const MarketChart: React.FC<MarketChartProps> = ({ marketData, indicators }) => {
+export const MarketChart: React.FC<MarketChartProps> = ({ data, indicators }) => {
     const chartContainerRef = React.useRef<HTMLDivElement>(null);
     const [chart, setChart] = React.useState<IChartApi | null>(null);
     const [candleSeries, setCandleSeries] = React.useState<ISeriesApi<"Candlestick"> | null>(null);
@@ -61,20 +70,6 @@ export const MarketChart: React.FC<MarketChartProps> = ({ marketData, indicators
             setChart(chartInstance);
             setCandleSeries(candleStickSeries);
 
-            // 添加MA线
-            const ma20Series = chartInstance.addLineSeries({
-                color: '#2196F3',
-                lineWidth: 2,
-                title: 'MA20',
-            });
-
-            const ma50Series = chartInstance.addLineSeries({
-                color: '#FF9800',
-                lineWidth: 2,
-                title: 'MA50',
-            });
-
-            // 响应式调整
             const handleResize = () => {
                 if (chartContainerRef.current) {
                     chartInstance.applyOptions({
@@ -93,8 +88,8 @@ export const MarketChart: React.FC<MarketChartProps> = ({ marketData, indicators
     }, []);
 
     React.useEffect(() => {
-        if (candleSeries && marketData.length > 0) {
-            const formattedData = marketData.map(d => ({
+        if (candleSeries && data.length > 0) {
+            const formattedData = data.map(d => ({
                 time: d.timestamp as Time,
                 open: d.open,
                 high: d.high,
@@ -103,7 +98,7 @@ export const MarketChart: React.FC<MarketChartProps> = ({ marketData, indicators
             }));
             candleSeries.setData(formattedData);
         }
-    }, [candleSeries, marketData]);
+    }, [candleSeries, data]);
 
     return (
         <Card title="市场行情">

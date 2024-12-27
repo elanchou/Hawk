@@ -1,14 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-
-export interface Position {
-  symbol: string;
-  quantity: number;
-  entryPrice: number;
-  currentPrice: number;
-  unrealizedPnl: number;
-}
+import type { Position } from '../../types';
 
 interface PositionListProps {
   positions: Position[];
@@ -29,20 +22,20 @@ export const PositionList: React.FC<PositionListProps> = ({ positions }) => {
     },
     {
       title: '开仓价',
-      dataIndex: 'entryPrice',
-      key: 'entryPrice',
+      dataIndex: 'entry_price',
+      key: 'entry_price',
       render: (price: number) => price.toFixed(2),
     },
     {
       title: '当前价',
-      dataIndex: 'currentPrice',
-      key: 'currentPrice',
+      dataIndex: 'current_price',
+      key: 'current_price',
       render: (price: number) => price.toFixed(2),
     },
     {
       title: '未实现盈亏',
-      dataIndex: 'unrealizedPnl',
-      key: 'unrealizedPnl',
+      dataIndex: 'unrealized_pnl',
+      key: 'unrealized_pnl',
       render: (pnl: number) => (
         <span style={{ color: pnl >= 0 ? '#3f8600' : '#cf1322' }}>
           {pnl.toFixed(2)}
