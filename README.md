@@ -1,26 +1,31 @@
-# Hawk Trading System
 
-Hawk Trading is a high-frequency cryptocurrency trading system.
+# 🌐 Hawk Trading System 🚀
 
-## Features
+Hawk Trading is a high-frequency cryptocurrency trading system designed for speed, accuracy, and flexibility.
 
-- Real-time market data streaming
-- High-frequency trading support
-- Order book visualization
-- Trading history and position management
-- Performance analytics
-- Backtesting capabilities
+---
 
-## Installation
+## ✨ Features
 
-1. Clone the repository:
+- 📈 **Real-time market data streaming**
+- ⚡ **High-frequency trading support**
+- 📊 **Order book visualization**
+- 💼 **Trading history and position management**
+- 📋 **Performance analytics**
+- 🔄 **Backtesting capabilities**
+
+---
+
+## 🛠️ Installation
+
+1. **Clone the repository**:
 
    ```bash
    git clone https://github.com/yourusername/hawk-trading.git
    cd hawk-trading/backend
    ```
 
-2. Create and activate a virtual environment:
+2. **Create and activate a virtual environment**:
 
    ```bash
    python -m venv .venv
@@ -28,50 +33,62 @@ Hawk Trading is a high-frequency cryptocurrency trading system.
    .venv\Scripts\activate     # Windows
    ```
 
-3. Install dependencies:
+3. **Install dependencies**:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-## Usage
+---
 
-### Training and Backtesting
+## ▶️ Usage
 
-To train the model and perform backtesting, run the following command:
+### 🎯 Training and Backtesting
+
+To train the model and perform backtesting, run:
 
 ```bash
 python scripts/train_and_backtest.py
 ```
 
-### Market Data Retrieval
+---
 
-Before running training and backtesting, ensure that you have correctly configured the market data retrieval functionality. Check the data retrieval logic in `src/services/market_data_service.py` to ensure that the data source returns data containing the `timestamp` column.
+### 📡 Market Data Retrieval
 
-### Error Handling
+Before training and backtesting, ensure market data retrieval is properly configured. Verify that the data source provides data with a `timestamp` column. 
 
-If you encounter the following error during execution:
+Check the data retrieval logic in `src/services/market_data_service.py`.
 
+---
+
+### 🛑 Error Handling
+
+Encountering this error?  
 ```
 KeyError: "None of ['timestamp'] are in the columns"
 ```
 
-Please check the following:
+Here’s how to resolve it:
 
-1. Ensure that the data returned from the data source contains the `timestamp` column.
-2. Print the DataFrame's column names in the `get_market_data` method for debugging:
+1. ✅ Confirm that the data source includes the `timestamp` column.  
+2. 🐛 Debug by printing the DataFrame's column names in the `get_market_data` method:
 
    ```python
    print("DataFrame columns:", df.columns)
    ```
 
-3. Ensure that the data loading logic is correct and that the data format meets expectations.
+3. ⚙️ Double-check the data loading logic and format.
 
-## Contribution
+---
 
-Contributions are welcome! Please submit issues or pull requests.
+## 🤝 Contribution
 
-## License
+Contributions are welcome! 🙌 Submit your issues or pull requests to help us improve. 🚀
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+---
 
+## 📜 License
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details. 📄
+
+Happy Trading! 🎉
